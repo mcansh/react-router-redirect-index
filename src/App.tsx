@@ -1,31 +1,40 @@
 import * as React from "react";
 import {
-  Route,
   Outlet,
   Link,
   redirect,
-  createRoutesFromElements,
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
 
-let router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/" loader={() => redirect("/my-app")} />
-      <Route path="/my-app" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
-        <Route path="dashboard" element={<Dashboard />} />
-
-        {/* Using path="*"" means "match anything", so this route
-                acts like a catch-all for URLs that we don't have explicit
-                routes for. */}
-        <Route path="*" element={<NoMatch />} />
-      </Route>
-    </>
-  )
-);
+let router = createBrowserRouter([
+  {
+    path: "/",
+    loader: () => redirect("/my-app"),
+  },
+  {
+    path: "/my-app",
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "about",
+        element: <About />,
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <NoMatch />,
+  },
+]);
 
 export default function App() {
   return (
